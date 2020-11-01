@@ -1,19 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "./.css";
 
+import MoveLocation from "./move_location";
+
 const ZombiesList = (props) => {
+  const [checked, setChecked] = useState([]);
+
+  const checkboxHandler = async (index) => {
+    if (index) {
+      setChecked((prevState) => [...prevState, index]);
+    }
+  };
+
   return (
     <div>
       <h3>Zombies list in quarentine:</h3>
-      {props.value.map((zombie) => {
+      <MoveLocation values={checked} moveFrom={props.value.location} />
+
+      {props.value.zombies.map((result, i) => {
         return (
-          <p key={zombie.id}>
-            ID: {zombie.id} Name: {zombie.tag_name}
-          </p>
+          <div key={result._id}>
+            <p>
+              <input
+                type="checkbox"
+                onChange={() => {
+                  checkboxHandler(result);
+                }}
+              />
+              Name: {result.tag_name}
+            </p>
+          </div>
         );
       })}
     </div>
   );
 };
+
 export default ZombiesList;
